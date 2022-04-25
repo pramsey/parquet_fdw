@@ -25,6 +25,7 @@
 #include "exec_state.hpp"
 #include "reader.hpp"
 #include "common.hpp"
+#include "geo.hpp"
 
 extern "C"
 {
@@ -731,6 +732,11 @@ extract_parquet_fields(const char *path) noexcept
         auto p_schema = reader->parquet_reader()->metadata()->schema();
         if (!parquet::arrow::SchemaManifest::Make(p_schema, nullptr, props, &manifest).ok())
             throw std::runtime_error("error creating arrow schema");
+
+        // xxxx
+        GeoParquet geo(*reader);
+        elog(NOTICE, "%s", geo.toString().c_str());
+
 
         fields = (FieldInfo *) exc_palloc(
                 sizeof(FieldInfo) * manifest.schema_fields.size());

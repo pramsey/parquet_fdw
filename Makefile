@@ -1,8 +1,8 @@
 MODULE_big = parquet_fdw
-OBJS = src/common.o src/reader.o src/exec_state.o src/parquet_impl.o src/parquet_fdw.o
+OBJS = src/common.o src/reader.o src/geo.o src/exec_state.o src/parquet_impl.o src/parquet_fdw.o
 PGFILEDESC = "parquet_fdw - foreign data wrapper for parquet"
 
-SHLIB_LINK = -lm -lstdc++ -lparquet -larrow
+SHLIB_LINK = -L/usr/local/lib -lm -lstdc++ -lparquet -larrow
 
 EXTENSION = parquet_fdw
 DATA = parquet_fdw--0.1.sql parquet_fdw--0.1--0.2.sql
@@ -14,7 +14,7 @@ EXTRA_CLEAN = sql/parquet_fdw.sql expected/parquet_fdw.out
 PG_CONFIG ?= pg_config
 
 # parquet_impl.cpp requires C++ 11.
-override PG_CXXFLAGS += -std=c++11 -O3
+override PG_CXXFLAGS += -std=c++11 -O3 -I/usr/local/include
 
 PGXS := $(shell $(PG_CONFIG) --pgxs)
 
